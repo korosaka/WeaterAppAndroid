@@ -42,5 +42,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$archComponents_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$archComponents_version"
-
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 }

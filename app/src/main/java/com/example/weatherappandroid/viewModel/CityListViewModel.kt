@@ -9,8 +9,8 @@ import com.example.weatherappandroid.repository.CityRepository
 class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
-    private var cityList: MutableList<City> = ArrayList()
-    private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    var cityList: MutableList<City> = ArrayList()
+    var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
 
     var testText: MutableLiveData<String> = MutableLiveData()
 

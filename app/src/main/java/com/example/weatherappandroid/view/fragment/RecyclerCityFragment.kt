@@ -9,8 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
 import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
+import com.example.weatherappandroid.view.recycler_view.CityListAdapter
+import com.example.weatherappandroid.view.recycler_view.MyItemDecoration
 import com.example.weatherappandroid.viewModel.CityListViewModel
 import kotlinx.android.synthetic.main.fragment_recycler_city.*
 
@@ -54,6 +57,20 @@ class RecyclerCityFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
+
+        createRecyclerView()
+    }
+
+    private fun createRecyclerView() {
+        val recyclerView = city_recycler_view
+        recyclerView.setHasFixedSize(true)
+
+        recyclerView.layoutManager = LinearLayoutManager(activity)
+        recyclerView.addItemDecoration(MyItemDecoration(3))
+//        recyclerView.adapter = CityListAdapter(viewModel.cityList)
+
+        // TODO this way can not do DataBinding (next step is learning RecyclerView * DataBinding)
+        recyclerView.adapter = CityListAdapter(viewModel.filteredCityList.value!!)
     }
 
 //    companion object {
