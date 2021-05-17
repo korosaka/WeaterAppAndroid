@@ -1,6 +1,5 @@
 package com.example.weatherappandroid.viewModel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.weatherappandroid.model.City
@@ -28,12 +27,12 @@ class CityListViewModel : ViewModel() {
     }
 
     fun fetchCityData() {
-        val handler: (MutableList<City>) -> Unit = { cities ->
+        val completionHandler: (MutableList<City>) -> Unit = { cities ->
             cityList = cities
             updateFilter()
             updateTestText()
         }
-        CityRepository().fetchCities(handler)
+        CityRepository().fetchCities(completionHandler)
     }
 
     private fun filterCityList(): MutableList<City>? {
@@ -54,4 +53,10 @@ class CityListViewModel : ViewModel() {
     fun updateFilter() {
         filteredCityList.value = filterCityList()
     }
+
+    fun getFilteredCityCount(): Int = filteredCityList.value?.size ?: 0
+
+    fun getCity(position: Int): City = filteredCityList.value?.get(position)
+        ?: throw IllegalStateException("CityList is not Initialized")
+
 }

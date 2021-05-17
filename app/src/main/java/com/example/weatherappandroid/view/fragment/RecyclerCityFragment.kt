@@ -52,6 +52,7 @@ class RecyclerCityFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.updateFilter()
                 viewModel.updateTestText()
+                city_recycler_view.adapter?.notifyDataSetChanged()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -67,10 +68,7 @@ class RecyclerCityFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(MyItemDecoration(3))
-//        recyclerView.adapter = CityListAdapter(viewModel.cityList)
-
-        // TODO this way can not do DataBinding (next step is learning RecyclerView * DataBinding)
-        recyclerView.adapter = CityListAdapter(viewModel.filteredCityList.value!!)
+        recyclerView.adapter = CityListAdapter(viewModel, viewLifecycleOwner)
     }
 
 //    companion object {

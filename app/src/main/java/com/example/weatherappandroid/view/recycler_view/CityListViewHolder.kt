@@ -1,12 +1,6 @@
 package com.example.weatherappandroid.view.recycler_view
 
-import android.view.View
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherappandroid.R
+import com.example.weatherappandroid.databinding.CityListItemBinding
 
-class CityListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    var cityName: TextView = itemView.findViewById(R.id.city_name)
-
-}
+class CityListViewHolder(val binding: CityListItemBinding) : RecyclerView.ViewHolder(binding.root)
