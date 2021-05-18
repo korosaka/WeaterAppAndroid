@@ -19,7 +19,7 @@ class CityListViewModel : ViewModel() {
     fun updateTestText() {
         var testString = "test: "
 
-        for (city in filteredCityList.value ?: arrayListOf()) {
+        for (city in _filteredCityList.value ?: arrayListOf()) {
             testString += city.name
         }
         testText.value = testString
