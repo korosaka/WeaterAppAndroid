@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
 import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
@@ -23,9 +24,11 @@ class RecyclerCityFragment : Fragment() {
     private val viewModel: CityListViewModel by lazy {
         ViewModelProviders.of(this).get(CityListViewModel::class.java)
     }
+    private lateinit var recyclerCityAdapter: CityListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 //        arguments?.let {
 //            param1 = it.getString(ARG_PARAM1)
 //            param2 = it.getString(ARG_PARAM2)
@@ -36,6 +39,7 @@ class RecyclerCityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_city, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -52,7 +56,6 @@ class RecyclerCityFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.updateFilter()
                 viewModel.updateTestText()
-                city_recycler_view.adapter?.notifyDataSetChanged()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -60,6 +63,18 @@ class RecyclerCityFragment : Fragment() {
         })
 
         createRecyclerView()
+
+        /**
+         * Instead of RecyclerViewAdapter, if ListAdapter is used, this process might be unnecessary,,,,
+         * (however, other function may have to be used ??? I don't know a lot,,,,,)
+         * Detail: https://qiita.com/chohas/items/acbf3787cd80b5277af7
+         *
+         * Anyway, ListAdapter sounds nice, so let's use it in the next opportunity!
+         * (DiffUtil.Callback will be also used)
+         */
+        viewModel.filteredCityList.observe(viewLifecycleOwner) {
+            recyclerCityAdapter.notifyDataSetChanged()
+        }
     }
 
     private fun createRecyclerView() {
@@ -68,7 +83,7 @@ class RecyclerCityFragment : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(MyItemDecoration(3))
-        recyclerView.adapter = CityListAdapter(viewModel, viewLifecycleOwner)
+        recyclerView.adapter = recyclerCityAdapter
     }
 
 //    companion object {

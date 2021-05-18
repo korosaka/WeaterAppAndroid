@@ -1,7 +1,9 @@
 package com.example.weatherappandroid.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import com.example.weatherappandroid.model.City
 import com.example.weatherappandroid.repository.CityRepository
 
@@ -9,7 +11,8 @@ class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
     var cityList: MutableList<City> = ArrayList()
-    var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    private var _filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    val filteredCityList: LiveData<MutableList<City>> = _filteredCityList.distinctUntilChanged()
 
     var testText: MutableLiveData<String> = MutableLiveData()
 
@@ -51,7 +54,7 @@ class CityListViewModel : ViewModel() {
     }
 
     fun updateFilter() {
-        filteredCityList.value = filterCityList()
+        _filteredCityList.value = filterCityList()
     }
 
     fun getFilteredCityCount(): Int = filteredCityList.value?.size ?: 0
