@@ -14,6 +14,11 @@ class CityListViewModel : ViewModel() {
     private var _filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
     val filteredCityList: LiveData<MutableList<City>> = _filteredCityList.distinctUntilChanged()
 
+    /**
+     * like Delegate in Swift
+     */
+    var clickLister: ClickItemListener? = null
+
     var testText: MutableLiveData<String> = MutableLiveData()
 
     fun updateTestText() {
@@ -45,10 +50,13 @@ class CityListViewModel : ViewModel() {
         var filteredList: MutableList<City> = ArrayList()
 
         for (city in cityList) {
-            if (city.country.toUpperCase().contains(filterWordValue.toUpperCase()) || city.name.toUpperCase().contains(filterWordValue.toUpperCase()))
+            if (city.country.toUpperCase().contains(filterWordValue.toUpperCase()) ||
+                city.name.toUpperCase().contains(filterWordValue.toUpperCase())
+            ) {
                 filteredList.add(
                     city
                 )
+            }
         }
         return filteredList
     }
@@ -62,4 +70,11 @@ class CityListViewModel : ViewModel() {
     fun getCity(position: Int): City = filteredCityList.value?.get(position)
         ?: throw IllegalStateException("CityList is not Initialized")
 
+    fun onClickCity(item: City) {
+        clickLister?.onClickCityItem(item) ?: println("test: listener is null")
+    }
+}
+
+interface ClickItemListener {
+    fun onClickCityItem(item: City)
 }

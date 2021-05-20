@@ -3,31 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="city"
             type="com.example.weatherappandroid.model.City" />
+
+        <variable
+            name="viewModel"
+            type="com.example.weatherappandroid.viewModel.CityListViewModel" />
     </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#4682b4"
+        android:onClick="@{() -> viewModel.onClickCity(city)}">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/city_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#4682b4">
-
-            <TextView
-                android:id="@+id/city_name"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:background="#e6e6fa"
-                android:gravity="center"
-                android:text="@{city.name}"
-                />
-
-        </LinearLayout>
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="#e6e6fa"
+            android:gravity="center"
+            android:text="@{city.name}" />
 
     </LinearLayout>
+
 </layout>

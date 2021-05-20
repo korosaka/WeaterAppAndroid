@@ -1,5 +1,6 @@
 package com.example.weatherappandroid.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,9 +14,12 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
 import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
+import com.example.weatherappandroid.model.City
+import com.example.weatherappandroid.view.activity.WeatherInfoActivity
 import com.example.weatherappandroid.view.recycler_view.CityListAdapter
 import com.example.weatherappandroid.view.recycler_view.MyItemDecoration
 import com.example.weatherappandroid.viewModel.CityListViewModel
+import com.example.weatherappandroid.viewModel.ClickItemListener
 import kotlinx.android.synthetic.main.fragment_recycler_city.*
 
 class RecyclerCityFragment : Fragment() {
@@ -26,42 +30,28 @@ class RecyclerCityFragment : Fragment() {
     }
     private lateinit var recyclerCityAdapter: CityListAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
+        substituteBinding(inflater, container)
+        return binding.root
+    }
+
+    private fun substituteBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_city, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-        viewModel.fetchCityData()
-
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        edit_text.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.updateFilter()
-                viewModel.updateTestText()
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        })
-
+        viewModel.clickLister = createClickListener() // like Delegate in Swift
+        edit_text.addTextChangedListener(createTextChangeListener())
         createRecyclerView()
 
         /**
@@ -75,27 +65,41 @@ class RecyclerCityFragment : Fragment() {
         viewModel.filteredCityList.observe(viewLifecycleOwner) {
             recyclerCityAdapter.notifyDataSetChanged()
         }
+
+        viewModel.fetchCityData()
     }
 
     private fun createRecyclerView() {
         val recyclerView = city_recycler_view
         recyclerView.setHasFixedSize(true)
-
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.addItemDecoration(MyItemDecoration(3))
         recyclerView.adapter = recyclerCityAdapter
     }
 
-//    companion object {
-//
-//
-//        fun newInstance(param1: String, param2: String) =
-//            RecyclerCityFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-//            }
-//    }
+    private fun createClickListener(): ClickItemListener {
+        return object : ClickItemListener {
+            override fun onClickCityItem(item: City) {
+                moveToWeatherInfo()
+            }
+        }
+    }
+
+    private fun createTextChangeListener(): TextWatcher {
+        return object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.updateFilter()
+                viewModel.updateTestText()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        }
+    }
+
+    private fun moveToWeatherInfo() {
+        val intent = Intent(activity, WeatherInfoActivity::class.java)
+        activity?.startActivity(intent)
+    }
 }
 
