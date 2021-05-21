@@ -1,23 +1,30 @@
 package com.example.weatherappandroid.viewModel
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.distinctUntilChanged
 import com.example.weatherappandroid.model.City
 import com.example.weatherappandroid.repository.CityRepository
 
 class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
-    private var cityList: MutableList<City> = ArrayList()
-    private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    var cityList: MutableList<City> = ArrayList()
+    private var _filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    val filteredCityList: LiveData<MutableList<City>> = _filteredCityList.distinctUntilChanged()
+
+    /**
+     * like Delegate in Swift
+     */
+    var clickLister: ClickItemListener? = null
 
     var testText: MutableLiveData<String> = MutableLiveData()
 
     fun updateTestText() {
         var testString = "test: "
 
-        for (city in filteredCityList.value ?: arrayListOf()) {
+        for (city in _filteredCityList.value ?: arrayListOf()) {
             testString += city.name
         }
         testText.value = testString
@@ -28,12 +35,12 @@ class CityListViewModel : ViewModel() {
     }
 
     fun fetchCityData() {
-        val handler: (MutableList<City>) -> Unit = { cities ->
+        val completionHandler: (MutableList<City>) -> Unit = { cities ->
             cityList = cities
             updateFilter()
             updateTestText()
         }
-        CityRepository().fetchCities(handler)
+        CityRepository().fetchCities(completionHandler)
     }
 
     private fun filterCityList(): MutableList<City>? {
@@ -43,15 +50,31 @@ class CityListViewModel : ViewModel() {
         var filteredList: MutableList<City> = ArrayList()
 
         for (city in cityList) {
-            if (city.country.toUpperCase().contains(filterWordValue.toUpperCase()) || city.name.toUpperCase().contains(filterWordValue.toUpperCase()))
+            if (city.country.toUpperCase().contains(filterWordValue.toUpperCase()) ||
+                city.name.toUpperCase().contains(filterWordValue.toUpperCase())
+            ) {
                 filteredList.add(
                     city
                 )
+            }
         }
         return filteredList
     }
 
     fun updateFilter() {
-        filteredCityList.value = filterCityList()
+        _filteredCityList.value = filterCityList()
     }
+
+    fun getFilteredCityCount(): Int = filteredCityList.value?.size ?: 0
+
+    fun getCity(position: Int): City = filteredCityList.value?.get(position)
+        ?: throw IllegalStateException("CityList is not Initialized")
+
+    fun onClickCity(item: City) {
+        clickLister?.onClickCityItem(item) ?: println("test: listener is null")
+    }
+}
+
+interface ClickItemListener {
+    fun onClickCityItem(item: City)
 }
