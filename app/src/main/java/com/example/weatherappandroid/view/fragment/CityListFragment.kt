@@ -34,12 +34,14 @@ class CityListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //TODO duplicate!①
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         substituteBinding(inflater, container)
         return binding.root
     }
 
     private fun substituteBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        //TODO duplicate!②
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_city, container, false)

@@ -8,6 +8,7 @@ import com.example.weatherappandroid.viewModel.CityListViewModel
 
 class CityListActivity : AppCompatActivity() {
 
+    //TODO delete!
     private lateinit var viewModel: CityListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
