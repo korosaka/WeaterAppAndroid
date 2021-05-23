@@ -29,13 +29,15 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
         var weatherInfo: WeatherInfo? = null
 
         try {
+            val cityName = json.getString(Constants.CITY_NAME)
             val jsonArray = json.getJSONArray(Constants.WEATHER)
             val weatherJsonData = jsonArray.getJSONObject(0)
             val weatherMain = weatherJsonData.getString(Constants.WEATHER_MAIN)
             val description = weatherJsonData.getString(Constants.WEATHER_DESC)
-            val temperature = convertIntoCelsius(weatherJsonData.getDouble(Constants.TEMP))
+            val main = json.getJSONObject(Constants.MAIN_OBJECT)
+            val temperature = convertIntoCelsius(main.getDouble(Constants.TEMP))
 
-            weatherInfo = WeatherInfo(weatherMain, description, temperature)
+            weatherInfo = WeatherInfo(cityName, weatherMain, description, temperature)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
