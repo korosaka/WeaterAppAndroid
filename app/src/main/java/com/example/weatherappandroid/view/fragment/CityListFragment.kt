@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
 import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
 import com.example.weatherappandroid.model.City
+import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.view.activity.WeatherInfoActivity
 import com.example.weatherappandroid.view.recycler_view.CityListAdapter
 import com.example.weatherappandroid.view.recycler_view.MyItemDecoration
@@ -79,8 +80,8 @@ class CityListFragment : Fragment() {
 
     private fun createClickListener(): ClickItemListener {
         return object : ClickItemListener {
-            override fun onClickCityItem(item: City) {
-                moveToWeatherInfo()
+            override fun onClickCityItem(city: City) {
+                moveToWeatherInfo(city.id)
             }
         }
     }
@@ -99,8 +100,9 @@ class CityListFragment : Fragment() {
     }
 
     //TODO should have City as an arg
-    private fun moveToWeatherInfo() {
+    private fun moveToWeatherInfo(cityId: String) {
         val intent = Intent(activity, WeatherInfoActivity::class.java)
+        intent.putExtra(Constants.CITY_ID, cityId)
         activity?.startActivity(intent)
     }
 }

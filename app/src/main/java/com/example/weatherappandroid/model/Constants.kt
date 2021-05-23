@@ -11,6 +11,7 @@ class Constants {
         const val DUMMY_FILE_NAME = "DummyWeatherInfo.json"
         const val DIFF_KELVIN_CELSIUS = 273.15
 
+        const val EMPTY = ""
         const val EMPTY_TEXT = "----"
         const val CITY_ID = "cityId"
     }

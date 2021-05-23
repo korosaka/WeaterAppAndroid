@@ -17,6 +17,7 @@ class WeatherInfoFragment : Fragment() {
     private var cityId: String? = null
     private lateinit var binding: FragmentWeatherInfoBinding
     private val viewModel: WeatherInfoViewModel by lazy {
+        //TODO avoid unwrap
         ViewModelProviders.of(this).get(WeatherInfoViewModel::class.java)
     }
 
@@ -40,9 +41,14 @@ class WeatherInfoFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_weather_info, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.cityId = cityId
         binding.viewModel = viewModel
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.fetchWeatherInfo()
+    }
     companion object {
         @JvmStatic
         fun newInstance(cityId: String) =

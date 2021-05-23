@@ -21,7 +21,7 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
         val assetManager = MyApplication.instance.resources.assets
         val inputStream = assetManager.open(fileName)
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        Thread.sleep(2000) // test
+//        Thread.sleep(5000) // without async, in this time, view will be never shown
         return JSONObject(bufferedReader.readText())
     }
 
