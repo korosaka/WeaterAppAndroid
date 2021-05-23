@@ -18,6 +18,7 @@ class CityListViewModel : ViewModel() {
     var clickLister: ClickItemListener? = null // like Delegate in Swift
     var testText: MutableLiveData<String> = MutableLiveData()
 
+    //TODO getter shouldn't be used?? (Can filteredCityList be used?)
     fun getFilteredCityList(): LiveData<MutableList<City>> {
         return filteredCityList
     }
