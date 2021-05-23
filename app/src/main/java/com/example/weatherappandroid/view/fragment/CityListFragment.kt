@@ -22,7 +22,7 @@ import com.example.weatherappandroid.viewModel.CityListViewModel
 import com.example.weatherappandroid.viewModel.ClickItemListener
 import kotlinx.android.synthetic.main.fragment_recycler_city.*
 
-class RecyclerCityFragment : Fragment() {
+class CityListFragment : Fragment() {
 
     private lateinit var binding: FragmentRecyclerCityBinding
     private val viewModel: CityListViewModel by lazy {
@@ -62,11 +62,9 @@ class RecyclerCityFragment : Fragment() {
          * Anyway, ListAdapter sounds nice, so let's use it in the next opportunity!
          * (DiffUtil.Callback will be also used)
          */
-        viewModel.filteredCityList.observe(viewLifecycleOwner) {
+        viewModel.getFilteredCityList().observe(viewLifecycleOwner) {
             recyclerCityAdapter.notifyDataSetChanged()
         }
-
-        viewModel.fetchCityData()
     }
 
     private fun createRecyclerView() {
@@ -85,6 +83,7 @@ class RecyclerCityFragment : Fragment() {
         }
     }
 
+    //TODO should it be created in VM?
     private fun createTextChangeListener(): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -97,6 +96,7 @@ class RecyclerCityFragment : Fragment() {
         }
     }
 
+    //TODO should have City as an arg
     private fun moveToWeatherInfo() {
         val intent = Intent(activity, WeatherInfoActivity::class.java)
         activity?.startActivity(intent)
