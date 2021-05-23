@@ -10,5 +10,6 @@ class Constants {
         const val DIFF_KELVIN_CELSIUS = 273.15
 
         const val EMPTY_TEXT = "----"
+        const val CITY_ID = "cityId"
     }
 }
