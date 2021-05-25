@@ -13,7 +13,8 @@ import com.example.weatherappandroid.repository.CityRepository
 class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
-    var cityList: MutableList<City> = ArrayList()
+    //TODO should be immutable??(List)
+    private var cityList: MutableList<City> = ArrayList()
     private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
     var clickLister: ClickItemListener? = null // like Delegate in Swift
     var testText: MutableLiveData<String> = MutableLiveData()

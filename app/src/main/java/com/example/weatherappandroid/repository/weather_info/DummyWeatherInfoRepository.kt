@@ -1,9 +1,11 @@
 package com.example.weatherappandroid.repository.weather_info
 
-import com.example.weatherappandroid.model.City
 import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.model.MyApplication
 import com.example.weatherappandroid.model.WeatherInfo
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers.io
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -12,16 +14,25 @@ import kotlin.math.roundToInt
 
 class DummyWeatherInfoRepository : WeatherInfoRepository {
 
-    override fun fetchWeatherInfo(id: String, completion: (WeatherInfo?) -> Unit) {
-        val weatherInfo = extractWeatherInfo(getJsonObject(Constants.DUMMY_FILE_NAME))
-        completion(weatherInfo)
+    override fun fetchWeatherInfo(id: String): Observable<WeatherInfo?> {
+
+        /**
+         * without "defer", getJsonObject function run immediately on Main Thread before subscription
+         * ref: https://proandroiddev.com/from-rxjava-2-to-kotlin-flow-threading-8618867e1955
+         */
+        return Observable.defer { Observable.just(getJsonObject(Constants.DUMMY_FILE_NAME)) }
+            .subscribeOn(io()) // to change thread for the process done by subscribe()
+            .observeOn(AndroidSchedulers.mainThread()) // to use the result on Main thread
+            .map {
+                extractWeatherInfo(it)
+            }
     }
 
     private fun getJsonObject(fileName: String): JSONObject {
         val assetManager = MyApplication.instance.resources.assets
         val inputStream = assetManager.open(fileName)
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-//        Thread.sleep(5000) // without async, in this time, view will be never shown
+        Thread.sleep(5000) // without async, in this time, view will be never shown
         return JSONObject(bufferedReader.readText())
     }
 
