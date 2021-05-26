@@ -32,7 +32,7 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
         val assetManager = MyApplication.instance.resources.assets
         val inputStream = assetManager.open(fileName)
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        Thread.sleep(5000) // without async, in this time, view will be never shown
+        Thread.sleep(2000) // without async, in this time, view will be never shown
         return JSONObject(bufferedReader.readText())
     }
 
@@ -48,7 +48,7 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
             val main = json.getJSONObject(Constants.MAIN_OBJECT)
             val temperature = convertIntoCelsius(main.getDouble(Constants.TEMP))
 
-            weatherInfo = WeatherInfo(cityName, weatherMain, description, temperature)
+            weatherInfo = WeatherInfo(cityName, weatherMain, description, temperature.toString())
         } catch (e: JSONException) {
             e.printStackTrace()
         }
