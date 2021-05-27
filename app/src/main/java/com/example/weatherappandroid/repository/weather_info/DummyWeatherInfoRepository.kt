@@ -20,19 +20,25 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
          * without "defer", getJsonObject function run immediately on Main Thread before subscription
          * ref: https://proandroiddev.com/from-rxjava-2-to-kotlin-flow-threading-8618867e1955
          */
+        //TODO In this case, data to get is only one, so "Single" should be used rather than "Observable"?
         return Observable.defer { Observable.just(getJsonObject(Constants.DUMMY_FILE_NAME)) }
             .subscribeOn(io()) // to change thread for the process done by subscribe()
             .observeOn(AndroidSchedulers.mainThread()) // to use the result on Main thread
             .map {
                 extractWeatherInfo(it)
             }
+        //TODO let's practice "Observable.create", "onNext" and "onComplete" next time ref: https://qiita.com/Urotea/items/90fd1bc5e634e789d404
     }
 
     private fun getJsonObject(fileName: String): JSONObject {
         val assetManager = MyApplication.instance.resources.assets
         val inputStream = assetManager.open(fileName)
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-        Thread.sleep(2000) // without async, in this time, view will be never shown
+        /**
+         * to behave like real api.
+         * without async, in this time, view will be never shown.
+         */
+        Thread.sleep(2000)
         return JSONObject(bufferedReader.readText())
     }
 

@@ -24,8 +24,9 @@ class WeatherInfoViewModel : ViewModel() {
             .subscribe { weather ->
                 //TODO handling when weather is null
                 weatherInfo.value = weather
-            }
 
+                //TODO should stop(quit) subscription, (about memory leak)?
+            }
     }
 
 }
