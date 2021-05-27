@@ -38,7 +38,7 @@ class WeatherInfoViewModel : ViewModel() {
             .subscribe { weather ->
                 //TODO handling when weather is null
                 weatherInfo.value = weather
-                testText.value = "The data has fetched by Rx."
+                testText.value = "The data has fetched using Rx."
                 //TODO should stop(quit) subscription, (about memory leak)?
             }
     }
@@ -50,7 +50,7 @@ class WeatherInfoViewModel : ViewModel() {
             // the process related to UI must be on Main Thread
             withContext(Dispatchers.Main) {
                 weatherInfo.value = weather
-                testText.value = "The data has fetched by Coroutine."
+                testText.value = "The data has fetched using Coroutine."
             }
         }
     }
