@@ -6,5 +6,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 interface WeatherInfoRepository {
-    fun fetchWeatherInfo(id: String): Observable<WeatherInfo?>
+    fun fetchWeatherByRx(id: String): Observable<WeatherInfo?>
+    suspend fun fetchWeatherByCoroutine(id: String): WeatherInfo?
 }

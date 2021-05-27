@@ -14,8 +14,7 @@ import kotlin.math.roundToInt
 
 class DummyWeatherInfoRepository : WeatherInfoRepository {
 
-    override fun fetchWeatherInfo(id: String): Observable<WeatherInfo?> {
-
+    override fun fetchWeatherByRx(id: String): Observable<WeatherInfo?> {
         /**
          * without "defer", getJsonObject function run immediately on Main Thread before subscription
          * ref: https://proandroiddev.com/from-rxjava-2-to-kotlin-flow-threading-8618867e1955
@@ -30,6 +29,11 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
         //TODO let's practice "Observable.create", "onNext" and "onComplete" next time ref: https://qiita.com/Urotea/items/90fd1bc5e634e789d404
     }
 
+    override suspend fun fetchWeatherByCoroutine(id: String): WeatherInfo? {
+        val jsonData = getJsonObject(Constants.DUMMY_FILE_NAME)
+        return extractWeatherInfo(jsonData)
+    }
+
     private fun getJsonObject(fileName: String): JSONObject {
         val assetManager = MyApplication.instance.resources.assets
         val inputStream = assetManager.open(fileName)
@@ -41,6 +45,8 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
         Thread.sleep(2000)
         return JSONObject(bufferedReader.readText())
     }
+
+
 
     private fun extractWeatherInfo(json: JSONObject): WeatherInfo? {
         var weatherInfo: WeatherInfo? = null

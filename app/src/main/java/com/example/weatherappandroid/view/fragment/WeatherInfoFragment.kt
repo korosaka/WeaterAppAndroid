@@ -47,7 +47,12 @@ class WeatherInfoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchWeatherInfo()
+        /**
+         * async behavior can be easily found before creating UI.
+         * this is why this function is called here, not onStart
+         */
+//        viewModel.fetchWeatherByRx()
+        viewModel.fetchWeatherByCoroutine()
     }
     companion object {
         @JvmStatic

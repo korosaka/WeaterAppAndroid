@@ -86,7 +86,7 @@ class CityListFragment : Fragment() {
         }
     }
 
-    //TODO should it be created in VM?
+    //TODO should it be created in VM? or instead of it, can the textValue in VM  be observed(using observer)? ref: https://speakerdeck.com/yanzm/lifecycle-viewmodel-livedata-falsefu-xi?slide=30
     private fun createTextChangeListener(): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
