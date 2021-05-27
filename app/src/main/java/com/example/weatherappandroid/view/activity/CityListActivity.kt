@@ -3,11 +3,12 @@ package com.example.weatherappandroid.view.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.weatherappandroid.R
-import com.example.weatherappandroid.view.fragment.RecyclerCityFragment
+import com.example.weatherappandroid.view.fragment.CityListFragment
 import com.example.weatherappandroid.viewModel.CityListViewModel
 
 class CityListActivity : AppCompatActivity() {
 
+    //TODO delete!
     private lateinit var viewModel: CityListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +18,7 @@ class CityListActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, RecyclerCityFragment())
+                .add(R.id.container, CityListFragment())
                 .commit()
         }
     }

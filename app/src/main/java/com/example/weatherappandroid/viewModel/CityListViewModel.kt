@@ -3,38 +3,47 @@ package com.example.weatherappandroid.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
+import com.example.weatherappandroid.R
 import com.example.weatherappandroid.model.City
+import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.repository.CityRepository
 
+/**
+ * ref: https://developer.android.com/topic/libraries/architecture/viewmodel
+ */
 class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
-    var cityList: MutableList<City> = ArrayList()
-    private var _filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
-    val filteredCityList: LiveData<MutableList<City>> = _filteredCityList.distinctUntilChanged()
 
-    /**
-     * like Delegate in Swift
-     */
-    var clickLister: ClickItemListener? = null
-
+    //TODO should be immutable??(List)
+    private var cityList: MutableList<City> = ArrayList()
+    private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
+    var clickLister: ClickItemListener? = null // like Delegate in Swift
     var testText: MutableLiveData<String> = MutableLiveData()
+    var radioChecked = MutableLiveData<Int>()
+    private val defaultRadioChecked = R.id.button_coroutine
+
+    //TODO getter shouldn't be used?? (Can filteredCityList be used?)
+    fun getFilteredCityList(): LiveData<MutableList<City>> {
+        return filteredCityList
+    }
 
     fun updateTestText() {
         var testString = "test: "
 
-        for (city in _filteredCityList.value ?: arrayListOf()) {
+        for (city in filteredCityList.value ?: arrayListOf()) {
             testString += city.name
         }
         testText.value = testString
     }
 
     init {
-        filterWord.value = ""
+        filterWord.value = Constants.EMPTY
+        radioChecked.value = defaultRadioChecked
+        fetchCityData()
     }
 
-    fun fetchCityData() {
+    private fun fetchCityData() {
         val completionHandler: (MutableList<City>) -> Unit = { cities ->
             cityList = cities
             updateFilter()
@@ -62,7 +71,7 @@ class CityListViewModel : ViewModel() {
     }
 
     fun updateFilter() {
-        _filteredCityList.value = filterCityList()
+        filteredCityList.value = filterCityList()
     }
 
     fun getFilteredCityCount(): Int = filteredCityList.value?.size ?: 0
@@ -73,8 +82,19 @@ class CityListViewModel : ViewModel() {
     fun onClickCity(item: City) {
         clickLister?.onClickCityItem(item) ?: println("test: listener is null")
     }
+
+    fun getAsyncType(): AsyncType {
+        return when (radioChecked.value) {
+            defaultRadioChecked -> AsyncType.COROUTINE
+            else -> AsyncType.RX
+        }
+    }
 }
 
 interface ClickItemListener {
     fun onClickCityItem(item: City)
+}
+
+enum class AsyncType {
+    RX, COROUTINE
 }

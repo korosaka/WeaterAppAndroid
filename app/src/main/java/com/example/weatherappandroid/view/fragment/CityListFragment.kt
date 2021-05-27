@@ -13,18 +13,19 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
-import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
+import com.example.weatherappandroid.databinding.FragmentCityListBinding
 import com.example.weatherappandroid.model.City
+import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.view.activity.WeatherInfoActivity
 import com.example.weatherappandroid.view.recycler_view.CityListAdapter
 import com.example.weatherappandroid.view.recycler_view.MyItemDecoration
 import com.example.weatherappandroid.viewModel.CityListViewModel
 import com.example.weatherappandroid.viewModel.ClickItemListener
-import kotlinx.android.synthetic.main.fragment_recycler_city.*
+import kotlinx.android.synthetic.main.fragment_city_list.*
 
-class RecyclerCityFragment : Fragment() {
+class CityListFragment : Fragment() {
 
-    private lateinit var binding: FragmentRecyclerCityBinding
+    private lateinit var binding: FragmentCityListBinding
     private val viewModel: CityListViewModel by lazy {
         ViewModelProviders.of(this).get(CityListViewModel::class.java)
     }
@@ -34,15 +35,17 @@ class RecyclerCityFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //TODO duplicate!①
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         substituteBinding(inflater, container)
         return binding.root
     }
 
     private fun substituteBinding(inflater: LayoutInflater, container: ViewGroup?) {
+        //TODO duplicate!②
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_city, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_city_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
@@ -62,11 +65,9 @@ class RecyclerCityFragment : Fragment() {
          * Anyway, ListAdapter sounds nice, so let's use it in the next opportunity!
          * (DiffUtil.Callback will be also used)
          */
-        viewModel.filteredCityList.observe(viewLifecycleOwner) {
+        viewModel.getFilteredCityList().observe(viewLifecycleOwner) {
             recyclerCityAdapter.notifyDataSetChanged()
         }
-
-        viewModel.fetchCityData()
     }
 
     private fun createRecyclerView() {
@@ -79,12 +80,13 @@ class RecyclerCityFragment : Fragment() {
 
     private fun createClickListener(): ClickItemListener {
         return object : ClickItemListener {
-            override fun onClickCityItem(item: City) {
-                moveToWeatherInfo()
+            override fun onClickCityItem(city: City) {
+                moveToWeatherInfo(city.id)
             }
         }
     }
 
+    //TODO should it be created in VM? or instead of it, can the textValue in VM  be observed(using observer)? ref: https://speakerdeck.com/yanzm/lifecycle-viewmodel-livedata-falsefu-xi?slide=30
     private fun createTextChangeListener(): TextWatcher {
         return object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -97,8 +99,10 @@ class RecyclerCityFragment : Fragment() {
         }
     }
 
-    private fun moveToWeatherInfo() {
+    private fun moveToWeatherInfo(cityId: String) {
         val intent = Intent(activity, WeatherInfoActivity::class.java)
+        intent.putExtra(Constants.CITY_ID, cityId)
+        intent.putExtra(Constants.ASYNC_TYPE, viewModel.getAsyncType())
         activity?.startActivity(intent)
     }
 }
