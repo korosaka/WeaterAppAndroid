@@ -3,8 +3,9 @@ package com.example.weatherappandroid.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
+import com.example.weatherappandroid.R
 import com.example.weatherappandroid.model.City
+import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.repository.CityRepository
 
 /**
@@ -18,6 +19,8 @@ class CityListViewModel : ViewModel() {
     private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
     var clickLister: ClickItemListener? = null // like Delegate in Swift
     var testText: MutableLiveData<String> = MutableLiveData()
+    var radioChecked = MutableLiveData<Int>()
+    private val defaultRadioChecked = R.id.button_coroutine
 
     //TODO getter shouldn't be used?? (Can filteredCityList be used?)
     fun getFilteredCityList(): LiveData<MutableList<City>> {
@@ -34,7 +37,8 @@ class CityListViewModel : ViewModel() {
     }
 
     init {
-        filterWord.value = ""
+        filterWord.value = Constants.EMPTY
+        radioChecked.value = defaultRadioChecked
         fetchCityData()
     }
 
@@ -77,8 +81,19 @@ class CityListViewModel : ViewModel() {
     fun onClickCity(item: City) {
         clickLister?.onClickCityItem(item) ?: println("test: listener is null")
     }
+
+    fun getAsyncType(): AsyncType {
+        return when(radioChecked.value) {
+            defaultRadioChecked -> AsyncType.COROUTINE
+            else -> AsyncType.RX
+        }
+    }
 }
 
 interface ClickItemListener {
     fun onClickCityItem(item: City)
+}
+
+enum class AsyncType {
+    RX, COROUTINE
 }

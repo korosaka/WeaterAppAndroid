@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherappandroid.R
-import com.example.weatherappandroid.databinding.FragmentRecyclerCityBinding
+import com.example.weatherappandroid.databinding.FragmentCityListBinding
 import com.example.weatherappandroid.model.City
 import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.view.activity.WeatherInfoActivity
@@ -21,11 +21,11 @@ import com.example.weatherappandroid.view.recycler_view.CityListAdapter
 import com.example.weatherappandroid.view.recycler_view.MyItemDecoration
 import com.example.weatherappandroid.viewModel.CityListViewModel
 import com.example.weatherappandroid.viewModel.ClickItemListener
-import kotlinx.android.synthetic.main.fragment_recycler_city.*
+import kotlinx.android.synthetic.main.fragment_city_list.*
 
 class CityListFragment : Fragment() {
 
-    private lateinit var binding: FragmentRecyclerCityBinding
+    private lateinit var binding: FragmentCityListBinding
     private val viewModel: CityListViewModel by lazy {
         ViewModelProviders.of(this).get(CityListViewModel::class.java)
     }
@@ -45,7 +45,7 @@ class CityListFragment : Fragment() {
         //TODO duplicate!②
         recyclerCityAdapter = CityListAdapter(viewModel, viewLifecycleOwner)
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_recycler_city, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_city_list, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
     }
@@ -99,10 +99,10 @@ class CityListFragment : Fragment() {
         }
     }
 
-    //TODO should have City as an arg
     private fun moveToWeatherInfo(cityId: String) {
         val intent = Intent(activity, WeatherInfoActivity::class.java)
         intent.putExtra(Constants.CITY_ID, cityId)
+        intent.putExtra(Constants.ASYNC_TYPE, viewModel.getAsyncType())
         activity?.startActivity(intent)
     }
 }

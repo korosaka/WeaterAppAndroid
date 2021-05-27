@@ -10,9 +10,29 @@
     </data>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:orientation="vertical">
+
+        <RadioGroup
+            android:id="@+id/async_way"
+            android:checkedButton="@={view_model.radioChecked}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/button_coroutine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coroutine" />
+
+            <RadioButton
+                android:id="@+id/button_rx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rx" />
+        </RadioGroup>
 
         <EditText
             android:id="@+id/edit_text"
@@ -30,7 +50,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/city_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

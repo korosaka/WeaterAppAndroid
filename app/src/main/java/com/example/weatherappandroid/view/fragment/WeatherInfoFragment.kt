@@ -10,11 +10,13 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.weatherappandroid.R
 import com.example.weatherappandroid.databinding.FragmentWeatherInfoBinding
 import com.example.weatherappandroid.model.Constants
+import com.example.weatherappandroid.viewModel.AsyncType
 import com.example.weatherappandroid.viewModel.WeatherInfoViewModel
 
 
 class WeatherInfoFragment : Fragment() {
     private var cityId: String? = null
+    private var asyncType: AsyncType? = null
     private lateinit var binding: FragmentWeatherInfoBinding
     private val viewModel: WeatherInfoViewModel by lazy {
         //TODO avoid unwrap
@@ -25,6 +27,7 @@ class WeatherInfoFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             cityId = it.getString(Constants.CITY_ID)
+            asyncType = it.getSerializable(Constants.ASYNC_TYPE) as AsyncType?
         }
     }
 
@@ -42,24 +45,21 @@ class WeatherInfoFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_weather_info, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.cityId = cityId
+        viewModel.asyncType = asyncType
         binding.viewModel = viewModel
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /**
-         * async behavior can be easily found before creating UI.
-         * this is why this function is called here, not onStart
-         */
-//        viewModel.fetchWeatherByRx()
-        viewModel.fetchWeatherByCoroutine()
+        viewModel.fetchWeather()
     }
     companion object {
         @JvmStatic
-        fun newInstance(cityId: String) =
+        fun newInstance(cityId: String, asyncType: AsyncType) =
             WeatherInfoFragment().apply {
                 arguments = Bundle().apply {
                     putString(Constants.CITY_ID, cityId)
+                    putSerializable(Constants.ASYNC_TYPE, asyncType)
                 }
             }
     }

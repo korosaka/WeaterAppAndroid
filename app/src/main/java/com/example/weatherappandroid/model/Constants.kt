@@ -14,5 +14,6 @@ class Constants {
         const val EMPTY = ""
         const val EMPTY_TEXT = "----"
         const val CITY_ID = "cityId"
+        const val ASYNC_TYPE = "asyncType"
     }
 }
