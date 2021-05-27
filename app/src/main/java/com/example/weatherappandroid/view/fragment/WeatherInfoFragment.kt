@@ -53,6 +53,7 @@ class WeatherInfoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.fetchWeather()
     }
+
     companion object {
         @JvmStatic
         fun newInstance(cityId: String, asyncType: AsyncType) =

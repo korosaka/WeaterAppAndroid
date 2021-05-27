@@ -14,6 +14,7 @@ import com.example.weatherappandroid.repository.CityRepository
 class CityListViewModel : ViewModel() {
 
     var filterWord: MutableLiveData<String> = MutableLiveData()
+
     //TODO should be immutable??(List)
     private var cityList: MutableList<City> = ArrayList()
     private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
@@ -83,7 +84,7 @@ class CityListViewModel : ViewModel() {
     }
 
     fun getAsyncType(): AsyncType {
-        return when(radioChecked.value) {
+        return when (radioChecked.value) {
             defaultRadioChecked -> AsyncType.COROUTINE
             else -> AsyncType.RX
         }

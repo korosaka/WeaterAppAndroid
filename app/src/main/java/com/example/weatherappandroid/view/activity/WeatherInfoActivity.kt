@@ -14,11 +14,15 @@ class WeatherInfoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weather_info)
 
         if (savedInstanceState == null) {
-            val cityId = intent.getStringExtra(Constants.CITY_ID) ?: Constants.EMPTY //TODO should do some null handling!
+            val cityId = intent.getStringExtra(Constants.CITY_ID)
+                ?: Constants.EMPTY //TODO should do some null handling!
             val asyncType = intent.getSerializableExtra(Constants.ASYNC_TYPE)
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, WeatherInfoFragment.newInstance(cityId, asyncType as AsyncType))
+                .add(
+                    R.id.container,
+                    WeatherInfoFragment.newInstance(cityId, asyncType as AsyncType)
+                )
                 .commit()
         }
     }

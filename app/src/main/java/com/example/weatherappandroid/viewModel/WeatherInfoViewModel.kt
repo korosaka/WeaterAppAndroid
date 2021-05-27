@@ -3,6 +3,7 @@ package com.example.weatherappandroid.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.model.WeatherInfo
 import com.example.weatherappandroid.repository.weather_info.DummyWeatherInfoRepository
 import com.example.weatherappandroid.repository.weather_info.WeatherInfoRepository
@@ -14,15 +15,17 @@ class WeatherInfoViewModel : ViewModel() {
     var asyncType: AsyncType? = null
     private val weatherInfoRepo: WeatherInfoRepository
     var weatherInfo: MutableLiveData<WeatherInfo> = MutableLiveData()
+    var testText: MutableLiveData<String> = MutableLiveData()
 
     init {
         //TODO switch to APIRepo
         weatherInfoRepo = DummyWeatherInfoRepository()
+        testText.value = Constants.EMPTY
     }
 
     fun fetchWeather() {
         weatherInfo.value = WeatherInfo()
-        when(asyncType) {
+        when (asyncType) {
             AsyncType.COROUTINE -> fetchWeatherByCoroutine()
             AsyncType.RX -> fetchWeatherByRx()
             else -> return // TODO null(error) handling
@@ -35,6 +38,7 @@ class WeatherInfoViewModel : ViewModel() {
             .subscribe { weather ->
                 //TODO handling when weather is null
                 weatherInfo.value = weather
+                testText.value = "The data has fetched by Rx."
                 //TODO should stop(quit) subscription, (about memory leak)?
             }
     }
@@ -46,6 +50,7 @@ class WeatherInfoViewModel : ViewModel() {
             // the process related to UI must be on Main Thread
             withContext(Dispatchers.Main) {
                 weatherInfo.value = weather
+                testText.value = "The data has fetched by Coroutine."
             }
         }
     }

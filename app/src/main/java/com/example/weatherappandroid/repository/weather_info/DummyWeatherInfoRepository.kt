@@ -47,7 +47,6 @@ class DummyWeatherInfoRepository : WeatherInfoRepository {
     }
 
 
-
     private fun extractWeatherInfo(json: JSONObject): WeatherInfo? {
         var weatherInfo: WeatherInfo? = null
 
