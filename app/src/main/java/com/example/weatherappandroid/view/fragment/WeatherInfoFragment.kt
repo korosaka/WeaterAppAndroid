@@ -19,7 +19,6 @@ class WeatherInfoFragment : Fragment() {
     private var asyncType: AsyncType? = null
     private lateinit var binding: FragmentWeatherInfoBinding
     private val viewModel: WeatherInfoViewModel by lazy {
-        //TODO avoid unwrap
         ViewModelProviders.of(this).get(WeatherInfoViewModel::class.java)
     }
 

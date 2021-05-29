@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.model.WeatherInfo
-import com.example.weatherappandroid.repository.weather_info.DummyWeatherInfoRepository
+import com.example.weatherappandroid.repository.weather_info.APIWeatherInfoRepository
 import com.example.weatherappandroid.repository.weather_info.WeatherInfoRepository
 import kotlinx.coroutines.*
 
@@ -18,8 +18,8 @@ class WeatherInfoViewModel : ViewModel() {
     var testText: MutableLiveData<String> = MutableLiveData()
 
     init {
-        //TODO switch to APIRepo
-        weatherInfoRepo = DummyWeatherInfoRepository()
+//        weatherInfoRepo = DummyWeatherInfoRepository() //Dummy Repo (Local)
+        weatherInfoRepo = APIWeatherInfoRepository()
         testText.value = Constants.EMPTY
     }
 
