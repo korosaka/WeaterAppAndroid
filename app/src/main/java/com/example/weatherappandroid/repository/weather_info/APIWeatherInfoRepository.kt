@@ -10,11 +10,11 @@ import org.json.JSONException
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import kotlin.math.roundToInt
 
 class APIWeatherInfoRepository : WeatherInfoRepository {
 
-    //TODO error handling
     override fun fetchWeatherByRx(cityId: String): Observable<WeatherInfo?> {
         return Observable.defer {
             Observable.just(
@@ -24,7 +24,7 @@ class APIWeatherInfoRepository : WeatherInfoRepository {
             .subscribeOn(Schedulers.io()) // to change thread for the process done by subscribe()
             .observeOn(AndroidSchedulers.mainThread()) // to use the result on Main thread
             .map {
-                extractWeatherInfo(it.body())
+                extractWeatherInfo(it.body()) ?: throw IOException("failed to fetch weather data with API")
             }
     }
 
@@ -58,7 +58,7 @@ class APIWeatherInfoRepository : WeatherInfoRepository {
         return weatherInfo
     }
 
-    override suspend fun fetchWeatherByCoroutine(id: String): WeatherInfo? {
+    override suspend fun fetchWeatherByCoroutine(cityId: String): WeatherInfo? {
         //TODO
         println("Not yet implemented")
         return null

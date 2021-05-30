@@ -6,8 +6,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.weatherappandroid.model.Constants
 import com.example.weatherappandroid.model.WeatherInfo
 import com.example.weatherappandroid.repository.weather_info.APIWeatherInfoRepository
+import com.example.weatherappandroid.repository.weather_info.DummyWeatherInfoRepository
 import com.example.weatherappandroid.repository.weather_info.WeatherInfoRepository
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.*
+import org.reactivestreams.Subscriber
+import java.util.concurrent.Flow
 
 class WeatherInfoViewModel : ViewModel() {
 
@@ -35,12 +40,20 @@ class WeatherInfoViewModel : ViewModel() {
     private fun fetchWeatherByRx() {
         if (cityId == null) return // TODO some functions to show error on UI (EX: error dialog)
         weatherInfoRepo.fetchWeatherByRx(cityId!!)
-            .subscribe { weather ->
-                //TODO handling when weather is null
-                weatherInfo.value = weather
-                testText.value = "The data has fetched using Rx."
-                //TODO should stop(quit) subscription, (about memory leak)?
-            }
+            .subscribe(object : Observer<WeatherInfo?> {
+                override fun onComplete() {}
+                override fun onNext(t: WeatherInfo) {
+                    weatherInfo.value = t
+                    testText.value = "The data has fetched using Rx."
+                }
+
+                override fun onError(e: Throwable) {
+                    testText.value = "Error is happen in fetching data by Rx\n$e"
+                    // TODO error dialog should be shown
+                }
+
+                override fun onSubscribe(d: Disposable) {}
+            })
     }
 
     private fun fetchWeatherByCoroutine() {
