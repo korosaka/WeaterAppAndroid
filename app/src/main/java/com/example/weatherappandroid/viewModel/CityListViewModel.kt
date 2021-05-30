@@ -19,7 +19,7 @@ class CityListViewModel : ViewModel() {
     private var cityList: MutableList<City> = ArrayList()
     private var filteredCityList: MutableLiveData<MutableList<City>> = MutableLiveData()
     var clickLister: ClickItemListener? = null // like Delegate in Swift
-    var testText: MutableLiveData<String> = MutableLiveData()
+//    var testText: MutableLiveData<String> = MutableLiveData() // for data binding test
     var radioChecked = MutableLiveData<Int>()
     private val defaultRadioChecked = R.id.button_coroutine
 
@@ -28,14 +28,14 @@ class CityListViewModel : ViewModel() {
         return filteredCityList
     }
 
-    fun updateTestText() {
-        var testString = "test: "
-
-        for (city in filteredCityList.value ?: arrayListOf()) {
-            testString += city.name
-        }
-        testText.value = testString
-    }
+//    fun updateTestText() {
+//        var testString = "test: "
+//
+//        for (city in filteredCityList.value ?: arrayListOf()) {
+//            testString += city.name
+//        }
+//        testText.value = testString
+//    }
 
     init {
         filterWord.value = Constants.EMPTY
@@ -47,7 +47,7 @@ class CityListViewModel : ViewModel() {
         val completionHandler: (MutableList<City>) -> Unit = { cities ->
             cityList = cities
             updateFilter()
-            updateTestText()
+//            updateTestText()
         }
         CityRepository().fetchCities(completionHandler)
     }

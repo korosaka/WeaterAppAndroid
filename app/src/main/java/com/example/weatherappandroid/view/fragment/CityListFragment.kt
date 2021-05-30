@@ -91,7 +91,7 @@ class CityListFragment : Fragment() {
         return object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 viewModel.updateFilter()
-                viewModel.updateTestText()
+//                viewModel.updateTestText()
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
