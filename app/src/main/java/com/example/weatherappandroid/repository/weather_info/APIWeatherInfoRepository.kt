@@ -11,6 +11,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.lang.Exception
 import kotlin.math.roundToInt
 
 class APIWeatherInfoRepository : WeatherInfoRepository {
@@ -24,7 +25,8 @@ class APIWeatherInfoRepository : WeatherInfoRepository {
             .subscribeOn(Schedulers.io()) // to change thread for the process done by subscribe()
             .observeOn(AndroidSchedulers.mainThread()) // to use the result on Main thread
             .map {
-                extractWeatherInfo(it.body()) ?: throw IOException("failed to fetch weather data with API")
+                extractWeatherInfo(it.body())
+                    ?: throw IOException("failed to fetch weather data with API")
             }
     }
 
@@ -52,16 +54,20 @@ class APIWeatherInfoRepository : WeatherInfoRepository {
 
             weatherInfo = WeatherInfo(cityName, weatherMain, description, temperature.toString())
         } catch (e: JSONException) {
-            e.printStackTrace()
+            println("error: $e")
         }
 
         return weatherInfo
     }
 
     override suspend fun fetchWeatherByCoroutine(cityId: String): WeatherInfo? {
-        //TODO
-        println("Not yet implemented")
-        return null
+        return try {
+            val response = executeAPI(cityId)
+            extractWeatherInfo(response.body())
+        } catch (e: Exception) {
+            println("error: $e")
+            null
+        }
     }
 
     //TODO Duplicate

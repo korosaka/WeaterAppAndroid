@@ -23,7 +23,10 @@ class WeatherInfoViewModel : ViewModel() {
     var testText: MutableLiveData<String> = MutableLiveData()
 
     init {
-//        weatherInfoRepo = DummyWeatherInfoRepository() //Dummy Repo (Local)
+        /**
+         * Dummy Repo (Local Test Data)
+         */
+//        weatherInfoRepo = DummyWeatherInfoRepository()
         weatherInfoRepo = APIWeatherInfoRepository()
         testText.value = Constants.EMPTY
     }
@@ -48,7 +51,8 @@ class WeatherInfoViewModel : ViewModel() {
                 }
 
                 override fun onError(e: Throwable) {
-                    testText.value = "Error is happen in fetching data by Rx\n$e"
+                    testText.value = "Error is happen in fetching data by Rx"
+                    println("error: $e")
                     // TODO error dialog should be shown
                 }
 
@@ -62,8 +66,13 @@ class WeatherInfoViewModel : ViewModel() {
             val weather = weatherInfoRepo.fetchWeatherByCoroutine(cityId!!)
             // the process related to UI must be on Main Thread
             withContext(Dispatchers.Main) {
-                weatherInfo.value = weather
-                testText.value = "The data has fetched using Coroutine."
+                if (weather != null) {
+                    weatherInfo.value = weather
+                    testText.value = "The data has fetched using Coroutine."
+                } else {
+                    testText.value = "Error is happen in fetching data by Coroutine."
+                    // TODO error dialog should be shown
+                }
             }
         }
     }
