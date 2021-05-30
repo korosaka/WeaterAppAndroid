@@ -44,7 +44,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.5"
-                    android:text="Coroutines" />
+                    android:text="Coroutines"
+                    android:textStyle="bold" />
 
                 <RadioButton
                     android:id="@+id/button_rx"
@@ -53,7 +54,8 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.5"
-                    android:text="RxJava" />
+                    android:text="RxJava"
+                    android:textStyle="bold" />
             </RadioGroup>
 
         </LinearLayout>
