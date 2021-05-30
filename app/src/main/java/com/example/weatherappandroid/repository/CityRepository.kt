@@ -14,7 +14,8 @@ class CityRepository {
         City("1853908", "JAPAN", "Osaka"),
         City("2130037", "JAPAN", "Hokkaido"),
         City("1863967", "JAPAN", "Fukuoka"),
-        City("1854345", "JAPAN", "Okinawa")
+        City("1854345", "JAPAN", "Okinawa"),
+        City("error_id", "JAPAN", "ERROR CITY") //test
     )
 
     fun fetchCities(handler: (MutableList<City>) -> Unit) {
