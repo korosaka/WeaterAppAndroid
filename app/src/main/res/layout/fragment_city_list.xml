@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
@@ -14,43 +13,88 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <RadioGroup
-            android:id="@+id/async_way"
-            android:checkedButton="@={view_model.radioChecked}"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#00885a"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/button_coroutine"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coroutine" />
+                android:layout_margin="10dp"
+                android:text="Async Tool"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/button_rx"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/async_way"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Rx" />
-        </RadioGroup>
+                android:layout_margin="10dp"
+                android:background="#ffffff"
+                android:checkedButton="@={view_model.radioChecked}"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/edit_text"
+                <RadioButton
+                    android:id="@+id/button_coroutine"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.5"
+                    android:text="Coroutines" />
+
+                <RadioButton
+                    android:id="@+id/button_rx"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.5"
+                    android:text="RxJava" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="@={view_model.filterWord}" />
+            android:background="#7fffbf"
+            android:orientation="horizontal"
+            android:padding="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="@{view_model.testText}" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Filter"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:inputType="text"
+                android:maxLines="1"
+                android:text="@={view_model.filterWord}" />
+        </LinearLayout>
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@color/colorPrimary"-->
+        <!--            android:text="@{view_model.testText}" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/city_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#7f7fff" />
 
     </LinearLayout>
 
