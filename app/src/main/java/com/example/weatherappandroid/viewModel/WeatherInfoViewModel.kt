@@ -47,7 +47,7 @@ class WeatherInfoViewModel : ViewModel() {
                 override fun onComplete() {}
                 override fun onNext(t: WeatherInfo) {
                     weatherInfo.value = t
-                    testText.value = "The data has fetched using Rx."
+                    testText.value = "The data has been fetched using Rx."
                 }
 
                 override fun onError(e: Throwable) {
@@ -68,7 +68,7 @@ class WeatherInfoViewModel : ViewModel() {
             withContext(Dispatchers.Main) {
                 if (weather != null) {
                     weatherInfo.value = weather
-                    testText.value = "The data has fetched using Coroutine."
+                    testText.value = "The data has been fetched using Coroutine."
                 } else {
                     testText.value = "Error is happen in fetching data by Coroutine."
                     // TODO error dialog should be shown
